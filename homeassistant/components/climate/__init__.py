@@ -5,7 +5,7 @@ import functools as ft
 import logging
 from operator import attrgetter
 from types import MemberDescriptorType
-from typing import Any, Literal, cast, final, override
+from typing import TYPE_CHECKING, Any, Literal, cast, final, override
 
 from propcache.api import cached_property
 
@@ -561,59 +561,68 @@ class ClimateEntity(Entity, cached_properties=CACHED_PROPERTIES_WITH_ATTR_):
         """Return the unit of measurement the entity reports temperatures in."""
         return self._attr_native_temperature_unit
 
-    @property
-    def temperature_unit(self) -> str:
-        """Return the unit of measurement the entity reports temperatures in.
+    if TYPE_CHECKING:
+        _attr_temperature_unit: str
 
-        Deprecated, use native_temperature_unit instead.
-        """
-        _report_deprecated_temperature_read(
-            type(self),
-            "temperature_unit",
-            "reading the deprecated temperature_unit property",
-        )
-        if (authored := self._native_temperature_unit_authored) is not None:
-            return cast(str, _read_authored_native(authored[0], self))
-        return cast(str, _read_deprecated_attr(self, "temperature_unit"))
+        @cached_property
+        def temperature_unit(self) -> str:
+            """Deprecated, use native_temperature_unit instead."""
 
-    @temperature_unit.setter
-    def temperature_unit(self, value: str) -> None:
-        """Set the native unit of measurement.
+    else:
 
-        Deprecated, use _attr_native_temperature_unit instead.
-        """
-        _report_deprecated_temperature_member(
-            type(self),
-            "temperature_unit",
-            "setting the deprecated temperature_unit attribute",
-        )
-        self._attr_native_temperature_unit = value
+        @property
+        def temperature_unit(self) -> str:
+            """Return the unit of measurement the entity reports temperatures in.
 
-    @property
-    def _attr_temperature_unit(self) -> str:
-        """Return the native unit of measurement.
+            Deprecated, use native_temperature_unit instead.
+            """
+            _report_deprecated_temperature_read(
+                type(self),
+                "temperature_unit",
+                "reading the deprecated temperature_unit property",
+            )
+            if (authored := self._native_temperature_unit_authored) is not None:
+                return cast(str, _read_authored_native(authored[0], self))
+            return cast(str, _read_deprecated_attr(self, "temperature_unit"))
 
-        Deprecated, use _attr_native_temperature_unit instead.
-        """
-        _report_deprecated_temperature_read(
-            type(self),
-            "temperature_unit",
-            "reading the deprecated _attr_temperature_unit attribute",
-        )
-        return self._attr_native_temperature_unit
+        @temperature_unit.setter
+        def temperature_unit(self, value: str) -> None:
+            """Set the native unit of measurement.
 
-    @_attr_temperature_unit.setter
-    def _attr_temperature_unit(self, value: str) -> None:
-        """Set the native unit of measurement.
+            Deprecated, use _attr_native_temperature_unit instead.
+            """
+            _report_deprecated_temperature_member(
+                type(self),
+                "temperature_unit",
+                "setting the deprecated temperature_unit attribute",
+            )
+            self._attr_native_temperature_unit = value
 
-        Deprecated, use _attr_native_temperature_unit instead.
-        """
-        _report_deprecated_temperature_member(
-            type(self),
-            "temperature_unit",
-            "setting the deprecated _attr_temperature_unit attribute",
-        )
-        self._attr_native_temperature_unit = value
+        @property
+        def _attr_temperature_unit(self) -> str:
+            """Return the native unit of measurement.
+
+            Deprecated, use _attr_native_temperature_unit instead.
+            """
+            _report_deprecated_temperature_read(
+                type(self),
+                "temperature_unit",
+                "reading the deprecated _attr_temperature_unit attribute",
+            )
+            return self._attr_native_temperature_unit
+
+        @_attr_temperature_unit.setter
+        def _attr_temperature_unit(self, value: str) -> None:
+            """Set the native unit of measurement.
+
+            Deprecated, use _attr_native_temperature_unit instead.
+            """
+            _report_deprecated_temperature_member(
+                type(self),
+                "temperature_unit",
+                "setting the deprecated _attr_temperature_unit attribute",
+            )
+            self._attr_native_temperature_unit = value
 
     @cached_property
     def current_humidity(self) -> float | None:
@@ -645,118 +654,138 @@ class ClimateEntity(Entity, cached_properties=CACHED_PROPERTIES_WITH_ATTR_):
         """Return the current temperature in the native unit."""
         return self._attr_native_current_temperature
 
-    @property
-    def current_temperature(self) -> float | None:
-        """Return the current temperature in the native unit.
+    if TYPE_CHECKING:
+        _attr_current_temperature: float | None
 
-        Deprecated, use native_current_temperature instead.
-        """
-        _report_deprecated_temperature_read(
-            type(self),
-            "current_temperature",
-            "reading the deprecated current_temperature property",
-        )
-        if (authored := self._native_current_temperature_authored) is not None:
-            return cast(float | None, _read_authored_native(authored[0], self))
-        return cast(float | None, _read_deprecated_attr(self, "current_temperature"))
+        @cached_property
+        def current_temperature(self) -> float | None:
+            """Deprecated, use native_current_temperature instead."""
 
-    @current_temperature.setter
-    def current_temperature(self, value: float | None) -> None:
-        """Set the current temperature in the native unit.
+    else:
 
-        Deprecated, use _attr_native_current_temperature instead.
-        """
-        _report_deprecated_temperature_member(
-            type(self),
-            "current_temperature",
-            "setting the deprecated current_temperature attribute",
-        )
-        self._attr_native_current_temperature = value
+        @property
+        def current_temperature(self) -> float | None:
+            """Return the current temperature in the native unit.
 
-    @property
-    def _attr_current_temperature(self) -> float | None:
-        """Return the current temperature in the native unit.
+            Deprecated, use native_current_temperature instead.
+            """
+            _report_deprecated_temperature_read(
+                type(self),
+                "current_temperature",
+                "reading the deprecated current_temperature property",
+            )
+            if (authored := self._native_current_temperature_authored) is not None:
+                return cast(float | None, _read_authored_native(authored[0], self))
+            return cast(
+                float | None, _read_deprecated_attr(self, "current_temperature")
+            )
 
-        Deprecated, use _attr_native_current_temperature instead.
-        """
-        _report_deprecated_temperature_read(
-            type(self),
-            "current_temperature",
-            "reading the deprecated _attr_current_temperature attribute",
-        )
-        return self._attr_native_current_temperature
+        @current_temperature.setter
+        def current_temperature(self, value: float | None) -> None:
+            """Set the current temperature in the native unit.
 
-    @_attr_current_temperature.setter
-    def _attr_current_temperature(self, value: float | None) -> None:
-        """Set the current temperature in the native unit.
+            Deprecated, use _attr_native_current_temperature instead.
+            """
+            _report_deprecated_temperature_member(
+                type(self),
+                "current_temperature",
+                "setting the deprecated current_temperature attribute",
+            )
+            self._attr_native_current_temperature = value
 
-        Deprecated, use _attr_native_current_temperature instead.
-        """
-        _report_deprecated_temperature_member(
-            type(self),
-            "current_temperature",
-            "setting the deprecated _attr_current_temperature attribute",
-        )
-        self._attr_native_current_temperature = value
+        @property
+        def _attr_current_temperature(self) -> float | None:
+            """Return the current temperature in the native unit.
+
+            Deprecated, use _attr_native_current_temperature instead.
+            """
+            _report_deprecated_temperature_read(
+                type(self),
+                "current_temperature",
+                "reading the deprecated _attr_current_temperature attribute",
+            )
+            return self._attr_native_current_temperature
+
+        @_attr_current_temperature.setter
+        def _attr_current_temperature(self, value: float | None) -> None:
+            """Set the current temperature in the native unit.
+
+            Deprecated, use _attr_native_current_temperature instead.
+            """
+            _report_deprecated_temperature_member(
+                type(self),
+                "current_temperature",
+                "setting the deprecated _attr_current_temperature attribute",
+            )
+            self._attr_native_current_temperature = value
 
     @cached_property
     def native_target_temperature(self) -> float | None:
         """Return the temperature we try to reach, in the native unit."""
         return self._attr_native_target_temperature
 
-    @property
-    def target_temperature(self) -> float | None:
-        """Return the temperature we try to reach, in the native unit.
+    if TYPE_CHECKING:
+        _attr_target_temperature: float | None
 
-        Deprecated, use native_target_temperature instead.
-        """
-        _report_deprecated_temperature_read(
-            type(self),
-            "target_temperature",
-            "reading the deprecated target_temperature property",
-        )
-        if (authored := self._native_target_temperature_authored) is not None:
-            return cast(float | None, _read_authored_native(authored[0], self))
-        return cast(float | None, _read_deprecated_attr(self, "target_temperature"))
+        @cached_property
+        def target_temperature(self) -> float | None:
+            """Deprecated, use native_target_temperature instead."""
 
-    @target_temperature.setter
-    def target_temperature(self, value: float | None) -> None:
-        """Set the temperature we try to reach, in the native unit.
+    else:
 
-        Deprecated, use _attr_native_target_temperature instead.
-        """
-        _report_deprecated_temperature_member(
-            type(self),
-            "target_temperature",
-            "setting the deprecated target_temperature attribute",
-        )
-        self._attr_native_target_temperature = value
+        @property
+        def target_temperature(self) -> float | None:
+            """Return the temperature we try to reach, in the native unit.
 
-    @property
-    def _attr_target_temperature(self) -> float | None:
-        """Return the temperature we try to reach, in the native unit.
+            Deprecated, use native_target_temperature instead.
+            """
+            _report_deprecated_temperature_read(
+                type(self),
+                "target_temperature",
+                "reading the deprecated target_temperature property",
+            )
+            if (authored := self._native_target_temperature_authored) is not None:
+                return cast(float | None, _read_authored_native(authored[0], self))
+            return cast(float | None, _read_deprecated_attr(self, "target_temperature"))
 
-        Deprecated, use _attr_native_target_temperature instead.
-        """
-        _report_deprecated_temperature_read(
-            type(self),
-            "target_temperature",
-            "reading the deprecated _attr_target_temperature attribute",
-        )
-        return self._attr_native_target_temperature
+        @target_temperature.setter
+        def target_temperature(self, value: float | None) -> None:
+            """Set the temperature we try to reach, in the native unit.
 
-    @_attr_target_temperature.setter
-    def _attr_target_temperature(self, value: float | None) -> None:
-        """Set the temperature we try to reach, in the native unit.
+            Deprecated, use _attr_native_target_temperature instead.
+            """
+            _report_deprecated_temperature_member(
+                type(self),
+                "target_temperature",
+                "setting the deprecated target_temperature attribute",
+            )
+            self._attr_native_target_temperature = value
 
-        Deprecated, use _attr_native_target_temperature instead.
-        """
-        _report_deprecated_temperature_member(
-            type(self),
-            "target_temperature",
-            "setting the deprecated _attr_target_temperature attribute",
-        )
-        self._attr_native_target_temperature = value
+        @property
+        def _attr_target_temperature(self) -> float | None:
+            """Return the temperature we try to reach, in the native unit.
+
+            Deprecated, use _attr_native_target_temperature instead.
+            """
+            _report_deprecated_temperature_read(
+                type(self),
+                "target_temperature",
+                "reading the deprecated _attr_target_temperature attribute",
+            )
+            return self._attr_native_target_temperature
+
+        @_attr_target_temperature.setter
+        def _attr_target_temperature(self, value: float | None) -> None:
+            """Set the temperature we try to reach, in the native unit.
+
+            Deprecated, use _attr_native_target_temperature instead.
+            """
+            _report_deprecated_temperature_member(
+                type(self),
+                "target_temperature",
+                "setting the deprecated _attr_target_temperature attribute",
+            )
+            self._attr_native_target_temperature = value
 
     @cached_property
     def target_temperature_step(self) -> float | None:
@@ -771,61 +800,70 @@ class ClimateEntity(Entity, cached_properties=CACHED_PROPERTIES_WITH_ATTR_):
         """
         return self._attr_native_target_temperature_high
 
-    @property
-    def target_temperature_high(self) -> float | None:
-        """Return the highbound target temperature we try to reach.
+    if TYPE_CHECKING:
+        _attr_target_temperature_high: float | None
 
-        Deprecated, use native_target_temperature_high instead.
-        """
-        _report_deprecated_temperature_read(
-            type(self),
-            "target_temperature_high",
-            "reading the deprecated target_temperature_high property",
-        )
-        if (authored := self._native_target_temperature_high_authored) is not None:
-            return cast(float | None, _read_authored_native(authored[0], self))
-        return cast(
-            float | None, _read_deprecated_attr(self, "target_temperature_high")
-        )
+        @cached_property
+        def target_temperature_high(self) -> float | None:
+            """Deprecated, use native_target_temperature_high instead."""
 
-    @target_temperature_high.setter
-    def target_temperature_high(self, value: float | None) -> None:
-        """Set the highbound target temperature we try to reach.
+    else:
 
-        Deprecated, use _attr_native_target_temperature_high instead.
-        """
-        _report_deprecated_temperature_member(
-            type(self),
-            "target_temperature_high",
-            "setting the deprecated target_temperature_high attribute",
-        )
-        self._attr_native_target_temperature_high = value
+        @property
+        def target_temperature_high(self) -> float | None:
+            """Return the highbound target temperature we try to reach.
 
-    @property
-    def _attr_target_temperature_high(self) -> float | None:
-        """Return the highbound target temperature we try to reach.
+            Deprecated, use native_target_temperature_high instead.
+            """
+            _report_deprecated_temperature_read(
+                type(self),
+                "target_temperature_high",
+                "reading the deprecated target_temperature_high property",
+            )
+            if (authored := self._native_target_temperature_high_authored) is not None:
+                return cast(float | None, _read_authored_native(authored[0], self))
+            return cast(
+                float | None, _read_deprecated_attr(self, "target_temperature_high")
+            )
 
-        Deprecated, use _attr_native_target_temperature_high instead.
-        """
-        _report_deprecated_temperature_read(
-            type(self),
-            "target_temperature_high",
-            "reading the deprecated _attr_target_temperature_high attribute",
-        )
-        return self._attr_native_target_temperature_high
+        @target_temperature_high.setter
+        def target_temperature_high(self, value: float | None) -> None:
+            """Set the highbound target temperature we try to reach.
 
-    @_attr_target_temperature_high.setter
-    def _attr_target_temperature_high(self, value: float | None) -> None:
-        """Set the highbound target temperature we try to reach.
+            Deprecated, use _attr_native_target_temperature_high instead.
+            """
+            _report_deprecated_temperature_member(
+                type(self),
+                "target_temperature_high",
+                "setting the deprecated target_temperature_high attribute",
+            )
+            self._attr_native_target_temperature_high = value
 
-        Deprecated, use _attr_native_target_temperature_high instead.
-        """
-        _report_deprecated_temperature_member(
-            type(self),
-            "target_temperature_high",
-            "setting the deprecated _attr_target_temperature_high attribute",
-        )
-        self._attr_native_target_temperature_high = value
+        @property
+        def _attr_target_temperature_high(self) -> float | None:
+            """Return the highbound target temperature we try to reach.
+
+            Deprecated, use _attr_native_target_temperature_high instead.
+            """
+            _report_deprecated_temperature_read(
+                type(self),
+                "target_temperature_high",
+                "reading the deprecated _attr_target_temperature_high attribute",
+            )
+            return self._attr_native_target_temperature_high
+
+        @_attr_target_temperature_high.setter
+        def _attr_target_temperature_high(self, value: float | None) -> None:
+            """Set the highbound target temperature we try to reach.
+
+            Deprecated, use _attr_native_target_temperature_high instead.
+            """
+            _report_deprecated_temperature_member(
+                type(self),
+                "target_temperature_high",
+                "setting the deprecated _attr_target_temperature_high attribute",
+            )
+            self._attr_native_target_temperature_high = value
 
     @cached_property
     def native_target_temperature_low(self) -> float | None:
@@ -835,59 +873,70 @@ class ClimateEntity(Entity, cached_properties=CACHED_PROPERTIES_WITH_ATTR_):
         """
         return self._attr_native_target_temperature_low
 
-    @property
-    def target_temperature_low(self) -> float | None:
-        """Return the lowbound target temperature we try to reach.
+    if TYPE_CHECKING:
+        _attr_target_temperature_low: float | None
 
-        Deprecated, use native_target_temperature_low instead.
-        """
-        _report_deprecated_temperature_read(
-            type(self),
-            "target_temperature_low",
-            "reading the deprecated target_temperature_low property",
-        )
-        if (authored := self._native_target_temperature_low_authored) is not None:
-            return cast(float | None, _read_authored_native(authored[0], self))
-        return cast(float | None, _read_deprecated_attr(self, "target_temperature_low"))
+        @cached_property
+        def target_temperature_low(self) -> float | None:
+            """Deprecated, use native_target_temperature_low instead."""
 
-    @target_temperature_low.setter
-    def target_temperature_low(self, value: float | None) -> None:
-        """Set the lowbound target temperature we try to reach.
+    else:
 
-        Deprecated, use _attr_native_target_temperature_low instead.
-        """
-        _report_deprecated_temperature_member(
-            type(self),
-            "target_temperature_low",
-            "setting the deprecated target_temperature_low attribute",
-        )
-        self._attr_native_target_temperature_low = value
+        @property
+        def target_temperature_low(self) -> float | None:
+            """Return the lowbound target temperature we try to reach.
 
-    @property
-    def _attr_target_temperature_low(self) -> float | None:
-        """Return the lowbound target temperature we try to reach.
+            Deprecated, use native_target_temperature_low instead.
+            """
+            _report_deprecated_temperature_read(
+                type(self),
+                "target_temperature_low",
+                "reading the deprecated target_temperature_low property",
+            )
+            if (authored := self._native_target_temperature_low_authored) is not None:
+                return cast(float | None, _read_authored_native(authored[0], self))
+            return cast(
+                float | None, _read_deprecated_attr(self, "target_temperature_low")
+            )
 
-        Deprecated, use _attr_native_target_temperature_low instead.
-        """
-        _report_deprecated_temperature_read(
-            type(self),
-            "target_temperature_low",
-            "reading the deprecated _attr_target_temperature_low attribute",
-        )
-        return self._attr_native_target_temperature_low
+        @target_temperature_low.setter
+        def target_temperature_low(self, value: float | None) -> None:
+            """Set the lowbound target temperature we try to reach.
 
-    @_attr_target_temperature_low.setter
-    def _attr_target_temperature_low(self, value: float | None) -> None:
-        """Set the lowbound target temperature we try to reach.
+            Deprecated, use _attr_native_target_temperature_low instead.
+            """
+            _report_deprecated_temperature_member(
+                type(self),
+                "target_temperature_low",
+                "setting the deprecated target_temperature_low attribute",
+            )
+            self._attr_native_target_temperature_low = value
 
-        Deprecated, use _attr_native_target_temperature_low instead.
-        """
-        _report_deprecated_temperature_member(
-            type(self),
-            "target_temperature_low",
-            "setting the deprecated _attr_target_temperature_low attribute",
-        )
-        self._attr_native_target_temperature_low = value
+        @property
+        def _attr_target_temperature_low(self) -> float | None:
+            """Return the lowbound target temperature we try to reach.
+
+            Deprecated, use _attr_native_target_temperature_low instead.
+            """
+            _report_deprecated_temperature_read(
+                type(self),
+                "target_temperature_low",
+                "reading the deprecated _attr_target_temperature_low attribute",
+            )
+            return self._attr_native_target_temperature_low
+
+        @_attr_target_temperature_low.setter
+        def _attr_target_temperature_low(self, value: float | None) -> None:
+            """Set the lowbound target temperature we try to reach.
+
+            Deprecated, use _attr_native_target_temperature_low instead.
+            """
+            _report_deprecated_temperature_member(
+                type(self),
+                "target_temperature_low",
+                "setting the deprecated _attr_target_temperature_low attribute",
+            )
+            self._attr_native_target_temperature_low = value
 
     @cached_property
     def preset_mode(self) -> str | None:
